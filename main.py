@@ -5,8 +5,16 @@
 
 import cv2 as cv
 import numpy as np
+import shutil
 
-cap = cv.VideoCapture(0)
+video = "rollingCan.mp4"
+cap = cv.VideoCapture(video)
+
+fps = cap.get(cv.CAP_PROP_FPS)
+fourccCodec = cv.VideoWriter_fourcc(*"avc1")
+finalVideoPath = "finalCan.mp4"
+finalVideo = cv.VideoWriter(finalVideoPath, fourccCodec, fps, (2160, 3840))
+frameCount = 0
 
 while True:
   ret, frame = cap.read()
@@ -24,6 +32,8 @@ while True:
   cv.circle(img, (int(x), int(y)), int(r), (0, 255, 0), 3)
   cv.circle(img, (int(x), int(y)), 2, (0, 255, 0), 3)
 
-  cv.imshow("Circular Shape Detection", img)
+  finalVideo.write(img)
+  frameCount += 1
 cap.release()
+finalVideo.release()
 cv.destroyAllWindows()
